@@ -63,7 +63,7 @@ export default function App() {
                   <small className="text-muted">
                     by {item.author ? item.author : item.newsSite},{" "}
                     {item.date
-                      ? new Date(item.date).toDateString()
+                      ? new Date(item.date.split(",")[0]).toDateString()
                       : new Date(item.publishedAt).toDateString()}
                   </small>
                   <Card.Text>
