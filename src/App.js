@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
-import { Navbar, Container, Nav, Card, Button } from "react-bootstrap";
+import { useState } from "react";
+import { Navbar, Container, Nav, Spinner, Card, Button } from "react-bootstrap";
+import useResponse from "./useResponse";
 
 const CategoryList = [
   "all",
@@ -8,6 +9,7 @@ const CategoryList = [
   "sports",
   "world",
   "politics",
+  "space",
   "technology",
   "startup",
   "entertainment",
@@ -23,14 +25,8 @@ const capitalizeFirstLetter = (string) => {
 
 export default function App() {
   const [category, setCategory] = useState(CategoryList[0]);
-  const [data, setData] = useState({});
-
-  useEffect(() => {
-    fetch(`https://inshortsapi.vercel.app/news?category=${category}`)
-      .then((res) => res.json())
-      .then((json) => setData(json));
-  }, [category]);
-
+  const response = useResponse(category);
+  console.log(category, response);
   return (
     <div>
       <Navbar bg="dark" variant="dark" expand="lg">
@@ -50,27 +46,34 @@ export default function App() {
           </Navbar.Collapse>
         </Container>
       </Navbar>
-
-      {Object.keys(data).length > 0 && (
-        <div className="mx-auto" style={{ width: "24rem" }}>
-          <h1>{capitalizeFirstLetter(data.category)}</h1>
-          {data.data.map((item) => {
+      <div className="mx-auto" style={{ width: "24rem" }}>
+        <h1>{capitalizeFirstLetter(category)}</h1>
+        {response.status === "loading" && (
+          <Spinner animation="grow" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </Spinner>
+        )}
+        {response.status === "loaded" &&
+          response.data.map((item) => {
             return (
               <Card key={item.title}>
                 <Card.Img variant="top" src={item.imageUrl} />
                 <Card.Body>
                   <Card.Title>{item.title}</Card.Title>
-                  <Card.Text>{item.content}</Card.Text>
+                  <small className="text-muted">
+                    by {item.author ? item.author : item.newsSite},{" "}
+                    {item.date
+                      ? new Date(item.date).toDateString()
+                      : new Date(item.publishedAt).toDateString()}
+                  </small>
                   <Card.Text>
-                    <small class="text-muted">
-                      By {item.author}, {item.date}
-                    </small>
+                    {item.content ? item.content : item.summary}
                   </Card.Text>
                   <div className="d-flex justify-content-end">
                     <Button
                       variant="light"
                       size="sm"
-                      href={item.readMoreUrl}
+                      href={item.readMoreUrl ? item.readMoreUrl : item.url}
                       target="_blank"
                     >
                       Read more
@@ -80,8 +83,7 @@ export default function App() {
               </Card>
             );
           })}
-        </div>
-      )}
+      </div>
     </div>
   );
 }
