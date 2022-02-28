@@ -50,6 +50,7 @@ export default function App() {
           </Navbar.Collapse>
         </Container>
       </Navbar>
+
       {Object.keys(data).length > 0 && (
         <div className="mx-auto" style={{ width: "24rem" }}>
           <h1>{capitalizeFirstLetter(data.category)}</h1>
@@ -60,6 +61,11 @@ export default function App() {
                 <Card.Body>
                   <Card.Title>{item.title}</Card.Title>
                   <Card.Text>{item.content}</Card.Text>
+                  <Card.Text>
+                    <small class="text-muted">
+                      By {item.author}, {item.date}
+                    </small>
+                  </Card.Text>
                   <div className="d-flex justify-content-end">
                     <Button
                       variant="light"
