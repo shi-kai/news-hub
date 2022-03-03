@@ -1,38 +1,30 @@
-import { useState } from "react";
-import { Navbar, Container, Nav } from "react-bootstrap";
-import Inshorts from "./Inshorts";
-import Spaceflight from "./Spaceflight";
-import Currents from "./Currents";
-import GNews from "./GNews";
+import { Link, Outlet } from "react-router-dom";
 
-const SourceList = ["Spaceflight News", "GNews", "Currents", "Inshorts News"];
+const SiteList = [
+  { id: 0, name: "spaceflight", label: "Spaceflight News" },
+  { id: 1, name: "inshorts", label: "Inshorts News" },
+  { id: 2, name: "gnews", label: "GNews" },
+  { id: 3, name: "currents", label: "Currents" },
+];
 
 export default function App() {
-  const [source, setSource] = useState(SourceList[0]);
-
   return (
-    <div>
-      <Navbar bg="dark" variant="dark" expand="lg">
-        <Container>
-          <Navbar.Brand>📰 {source}</Navbar.Brand>
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
-          <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="me-auto">
-              {SourceList.map((item) => {
-                return (
-                  <Nav.Link key={item} onClick={() => setSource(item)}>
-                    {item}
-                  </Nav.Link>
-                );
-              })}
-            </Nav>
-          </Navbar.Collapse>
-        </Container>
-      </Navbar>
-      {source === "Spaceflight News" && <Spaceflight />}
-      {source === "GNews" && <GNews />}
-      {source === "Currents" && <Currents />}
-      {source === "Inshorts News" && <Inshorts />}
+    <div className="mx-auto" style={{ width: "24rem" }}>
+      <h1>News Hub</h1>
+      <nav>
+        {SiteList.map((site) => {
+          return (
+            <Link
+              key={site.id}
+              style={{ display: "block" }}
+              to={`/${site.name}`}
+            >
+              {site.label}
+            </Link>
+          );
+        })}
+      </nav>
+      <Outlet />
     </div>
   );
 }

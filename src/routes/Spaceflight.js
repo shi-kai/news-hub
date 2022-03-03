@@ -18,7 +18,8 @@ export default function Spaceflight() {
   const response = useResponse();
 
   return (
-    <div className="mx-auto" style={{ width: "24rem" }}>
+    <div>
+      <h2>Spaceflight News</h2>
       {response.status === "loading" && (
         <Spinner animation="grow" role="status">
           <span className="visually-hidden">Loading...</span>

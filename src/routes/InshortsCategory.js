@@ -1,21 +1,6 @@
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { Spinner, Card, Button } from "react-bootstrap";
-
-const CategoryList = [
-  "all",
-  "national",
-  "business",
-  "sports",
-  "world",
-  "politics",
-  "technology",
-  "startup",
-  "entertainment",
-  "miscellaneous",
-  "hatke",
-  "science",
-  "automobile",
-];
 
 function useResponse(category) {
   const [response, setResponse] = useState({ status: "unloaded", data: [] });
@@ -30,11 +15,13 @@ function useResponse(category) {
   return response;
 }
 
-export default function Inshorts() {
-  const response = useResponse("all");
+export default function InshortsCategory() {
+  let params = useParams();
+  const response = useResponse(params.categroy);
 
   return (
-    <div className="mx-auto" style={{ width: "24rem" }}>
+    <div>
+      <h3>{params.categroy}</h3>
       {response.status === "loading" && (
         <Spinner animation="grow" role="status">
           <span className="visually-hidden">Loading...</span>
