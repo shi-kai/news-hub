@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
 import { Spinner, Card, Button } from "react-bootstrap";
+import axios from "axios";
 
 function useResponse() {
   const [response, setResponse] = useState({ status: "unloaded", data: [] });
 
   useEffect(() => {
     setResponse({ status: "loading", data: [] });
-    fetch("https://api.spaceflightnewsapi.net/v3/articles")
-      .then((res) => res.json())
-      .then((json) => setResponse({ status: "loaded", data: json }));
+    axios("https://api.spaceflightnewsapi.net/v3/articles").then((response) => {
+      setResponse({ status: "loaded", data: response.data });
+    });
   }, []);
 
   return response;

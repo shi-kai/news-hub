@@ -1,15 +1,18 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Spinner, Card, Button } from "react-bootstrap";
+import axios from "axios";
 
 function useResponse(category) {
   const [response, setResponse] = useState({ status: "unloaded", data: [] });
 
   useEffect(() => {
     setResponse({ status: "loading", data: [] });
-    fetch(`https://inshortsapi.vercel.app/news?category=${category}`)
-      .then((res) => res.json())
-      .then((json) => setResponse({ status: "loaded", data: json }));
+    axios(`https://inshortsapi.vercel.app/news?category=${category}`).then(
+      (response) => {
+        setResponse({ status: "loaded", data: response.data });
+      }
+    );
   }, [category]);
 
   return response;

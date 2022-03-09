@@ -1,16 +1,17 @@
 import { useEffect, useState } from "react";
 import { Spinner, Card, Button } from "react-bootstrap";
+import axios from "axios";
 
 function useResponse() {
   const [response, setResponse] = useState({ status: "unloaded", data: [] });
 
   useEffect(() => {
     setResponse({ status: "loading", data: [] });
-    fetch(
-      "https://gnews.io/api/v4/top-headlines?token=55c13cd2531b74660af078f19bfe7d14"
-    )
-      .then((res) => res.json())
-      .then((json) => setResponse({ status: "loaded", data: json }));
+    axios(
+      `https://gnews.io/api/v4/top-headlines?token=${process.env.REACT_APP_API_KEY_GNEWS}`
+    ).then((response) => {
+      setResponse({ status: "loaded", data: response.data });
+    });
   }, []);
 
   return response;

@@ -1,16 +1,17 @@
 import { useEffect, useState } from "react";
 import { Spinner, Card, Button } from "react-bootstrap";
+import axios from "axios";
 
 function useResponse() {
   const [response, setResponse] = useState({ status: "unloaded", data: [] });
 
   useEffect(() => {
     setResponse({ status: "loading", data: [] });
-    fetch(
-      "https://api.currentsapi.services/v1/latest-news?apiKey=SCLGOTLkid_rzp8Frl8tsun3g_agUv3DMHaeuiakcLmcIFjc"
-    )
-      .then((res) => res.json())
-      .then((json) => setResponse({ status: "loaded", data: json }));
+    axios(
+      `https://api.currentsapi.services/v1/latest-news?apiKey=${process.env.REACT_APP_API_KEY_CURRENTS}`
+    ).then((response) => {
+      setResponse({ status: "loaded", data: response.data });
+    });
   }, []);
 
   return response;
